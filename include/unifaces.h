@@ -8,3 +8,6 @@
 #include "../h/thinking1.h"
 #include "../h/thinking2.h"
 #include "../h/thinking3.h"
+
+#define UNIFACE_WIDTH 128
+#define UNIFACE_HEIGHT 64

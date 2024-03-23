@@ -60,6 +60,11 @@ if __name__ == "__main__":
             header_list.append(new_h)
             
     # Create a unifaces header file
+    if not os.path.exists("include"):
+        os.makedirs("include")
     with open(f"include/unifaces.h", 'w') as f:
         for h in header_list:
             f.write(f"#include \"../h/{h}\"\n")
+        f.write("\n")
+        f.write("#define UNIFACE_WIDTH 128\n")
+        f.write("#define UNIFACE_HEIGHT 64\n")
