@@ -27,9 +27,19 @@ def png_to_c_header(png_filename, out_dir):
         f.write("{\\\n")
         
         for row in png_arr:
+            bit_count = 0
+            byte = 0
             for pixel in row:
-                val = hex(255 - pixel)
-                f.write(f"{val}, ")
+                val = 255 - pixel # invert value
+                bit = 0
+                if val > 128:
+                    bit = 1
+                byte = (byte << 1) | bit
+                if bit_count % 8 == 0:
+                    f.write(f"{hex(byte)}, ")
+                    byte = 0
+                    bit_count = 0
+                bit_count += 1
             f.write("\\\n")
         
         f.write("}\n\n")
