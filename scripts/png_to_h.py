@@ -2,6 +2,10 @@ import os
 import numpy as np
 from PIL import Image
 
+DEFINE_PREFIX = "UNIFACE_"
+header_list = []
+
+
 def png_to_c_header(png_filename, out_dir):
     
     img = Image.open(png_filename)
@@ -11,10 +15,10 @@ def png_to_c_header(png_filename, out_dir):
     
     file_name_base = png_filename.split("/")[-1].split(".")[0]
     
-    define_name = (file_name_base.replace("-", "_")
-                   .replace(".", "_")
-                   .replace(" ", "_")
-                   .upper())
+    define_name = DEFINE_PREFIX + (file_name_base.replace("-", "_")
+                                   .replace(".", "_")
+                                   .replace(" ", "_")
+                                   .upper())
     
     header_path = f"{out_dir}/{file_name_base}.h"
     with open(header_path, 'w') as f:
@@ -28,6 +32,7 @@ def png_to_c_header(png_filename, out_dir):
             f.write("\\\n")
         
         f.write("}\n\n")
+    return f"{file_name_base}.h"
 
 
 if __name__ == "__main__":
@@ -36,8 +41,8 @@ if __name__ == "__main__":
 
     
     # For all png in export/png folder, convert to C header
-    png_dir = "export/png"
-    out_dir = "export/h"
+    png_dir = "png"
+    out_dir = "h"
     
     # Create export/h folder if not exists
     if not os.path.exists(out_dir):
@@ -48,6 +53,13 @@ if __name__ == "__main__":
         if h.endswith(".h"):
             os.remove(f"{out_dir}/{h}")
     
+    # Convert all png to C headers
     for png in os.listdir(png_dir):
         if png.endswith(".png"):
-            png_to_c_header(f"{png_dir}/{png}", out_dir)    
+            new_h = png_to_c_header(f"{png_dir}/{png}", out_dir)
+            header_list.append(new_h)
+            
+    # Create a unifaces header file
+    with open(f"include/unifaces.h", 'w') as f:
+        for h in header_list:
+            f.write(f"#include \"../h/{h}\"\n")
