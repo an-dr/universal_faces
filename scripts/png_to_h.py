@@ -28,7 +28,8 @@ def png_to_c_header(png_filename, out_dir):
         
         for row in png_arr:
             for pixel in row:
-                f.write(f"{pixel}, ")
+                val = hex(255 - pixel)
+                f.write(f"{val}, ")
             f.write("\\\n")
         
         f.write("}\n\n")
