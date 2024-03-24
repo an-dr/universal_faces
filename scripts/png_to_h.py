@@ -36,7 +36,7 @@ def png_to_c_header(png_filename, out_dir):
                     bit = 1
                 byte = (byte << 1) | bit
                 if bit_count % 8 == 0:
-                    f.write(f"{hex(byte)}, ")
+                    f.write(f"{byte:#04x}, ")
                     byte = 0
                     bit_count = 0
                 bit_count += 1
